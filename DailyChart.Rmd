@@ -1,0 +1,144 @@
+---
+title: "DailyGraph"
+author: "Gaby"
+date: "2024-10-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(plotly)
+```
+reading in the daily data:
+```{r}
+day1_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/01Oct.csv",head = TRUE  ,sep = ",") 
+day2_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/02Oct.csv",head = TRUE  ,sep = ",")
+day3_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/03Oct.csv",head = TRUE  ,sep = ",")
+day4_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/04Oct.csv",head = TRUE  ,sep = ",")
+day5_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/05Oct.csv",head = TRUE  ,sep = ",")
+day6_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/06Oct.csv",head = TRUE  ,sep = ",")
+day7_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/07Oct.csv",head = TRUE  ,sep = ",")
+day8_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/08Oct.csv", sep= ",", header=T)
+day9_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/09Oct.csv",head = TRUE  ,sep = ",")
+day10_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/10Oct.csv",head = TRUE  ,sep = ",")
+day11_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/11Oct.csv",head = TRUE  ,sep = ",")
+day12_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/12Oct.csv",head = TRUE  ,sep = ",")
+day13_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/13Oct.csv",head = TRUE  ,sep = ",")
+day14_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/14Oct.csv",head = TRUE  ,sep = ",")
+day15_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/15Oct.csv",head = TRUE  ,sep = ",")
+day16_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/16Oct.csv",head = TRUE  ,sep = ",")
+day17_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/17Oct.csv",head = TRUE  ,sep = ",")
+day18_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/18Oct.csv",head = TRUE  ,sep = ",")
+day19_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/19Oct.csv",head = TRUE  ,sep = ",")
+day20_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/20Oct.csv",head = TRUE  ,sep = ",")
+day21_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/21Oct.csv",head = TRUE  ,sep = ",")
+day22_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/22Oct.csv",head = TRUE  ,sep = ",")
+#day23_df <- read.csv("C:/Users/gabyd/Desktop/TA/Trading Game/data/01Oct.csv",head = TRUE  ,sep = ",")
+
+```
+
+arrange data by ID:
+```{r}
+day1_df <- day1_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/01")) %>% mutate(UNI = if_else(Name>19577031, "UCT", "SU"))
+day2_df <- day2_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/02"))
+day3_df <- day3_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/03"))
+day4_df <- day4_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/04"))
+day5_df <- day5_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/05"))
+day6_df <- day6_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/06"))
+day7_df <- day7_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/07"))
+day8_df <- day8_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/08"))
+day9_df <- day9_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/09"))
+day10_df <- day10_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/10"))
+day11_df <- day11_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/11"))
+day12_df <- day12_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/12"))
+day13_df <- day13_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/13"))
+day14_df <- day14_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/14"))
+day15_df <- day15_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/15"))
+day16_df <- day16_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/16"))
+day17_df <- day17_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/17"))
+day18_df <- day18_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/18"))
+day19_df <- day19_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/19"))
+day20_df <- day20_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/20"))
+day21_df <- day21_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/21"))
+day22_df <- day22_df %>% arrange(Name) %>% mutate(Day = as.Date("2024/10/22"))
+
+```
+adding a rank value to dataframes:
+
+```{r}
+day1_df <- day1_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day2_df <- day2_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day3_df <- day3_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day4_df <- day4_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day5_df <- day5_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day6_df <- day6_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day7_df <- day7_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day8_df <- day8_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day9_df <- day9_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day10_df <- day10_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day11_df <- day11_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day12_df <- day12_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day13_df <- day13_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day14_df <- day14_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day15_df <- day15_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day16_df <- day16_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day17_df <- day17_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day18_df <- day18_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day19_df <- day19_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day20_df <- day20_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day21_df <- day21_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+day22_df <- day22_df %>% arrange(-Profit) %>% mutate(Rank = row_number()) %>% arrange(Name)
+```
+
+
+combining dataframes to plot:
+```{r}
+plot_df <- bind_rows(day1_df, day2_df, day3_df, day4_df, day5_df, day6_df, day7_df, day8_df, day9_df, day10_df, day11_df, day12_df, day12_df, day13_df, day14_df, day15_df, day16_df, day17_df, day18_df, day19_df, day20_df, day21_df, day22_df)
+
+plot_df <- plot_df %>% mutate(UNI = if_else(Name>19577031, "UCT", "SU"))
+```
+
+plotting the data:
+
+```{r}
+g <- plot_df %>% 
+ggplot(aes(x = Day, y = Profit, group= Name, color= UNI, text=paste("Day :", Day,
+                                "<br> ID :", Name, 
+                                "<br> Rank:", Rank, 
+                                "<br> Uni:", UNI, 
+                                "<br> Profit:", Profit)),
+      alpha = 0.8, 
+    size = 0.5) + 
+geom_line() + geom_point() +
+    scale_x_continuous(
+    breaks = seq.Date(as.Date("2024-10-01"), as.Date("2024-10-22"), by = "2 days"),
+    labels = ~ format(.x, "%d %b")
+  ) +
+    theme(legend.position = "bottom")
+
+g
+```
+
+interactive chart:
+
+```{r}
+ggplotly(g)
+```
+
+
+saving interactive chart as html file:
+```{r}
+fig <- ggplotly(g, tooltip = "text")
+fig
+#fig.write_html('C:/Users/gabyd/Desktop/TA/Trading Game/Chart.html')
+library(htmlwidgets)
+saveWidget(fig, file="C:/Users/gabyd/Desktop/TA/Trading Game/TradingGameDailyChart.html")
+```
+
+
+
+
+
